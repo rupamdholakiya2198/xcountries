@@ -13,8 +13,10 @@ function App() {
       .then(response => {
         setCountries(response.data);
       })
-      .catch(error => {
-        console.error("Error fetching country data:", error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        console.log('error logged:', error.message);
+        console.error('Error fetching data:', error.message)
         setError('Failed to load countries. Please try again')
       });
   }, []);
