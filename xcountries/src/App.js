@@ -1,65 +1,100 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
-export default function App() {
+// export default function App() {
+//   const [countries, setCountries] = useState([]);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     fetch("https://xcountries-backend.azurewebsites.net/all")
+//       .then((res) => {
+//         if (!res.ok) {
+//           throw new Error("API error");
+//         }
+//         return res.json();
+//       })
+//       .then((data) => {
+//         setCountries(data);
+//         setIsLoading(false);
+//       })
+//       .catch((err) => {
+//         console.error("Error fetching data: ", err);
+//         setError("Something went wrong");
+//         setIsLoading(false);
+//       });
+//   }, []);
+
+//   if (isLoading) {
+//     return <div>Loading...</div>; // ✅ must match exact test string
+//   }
+
+//   if (error) {
+//     return <div>{error}</div>;
+//   }
+
+//   return (
+//     <div style={{
+//       display: "flex",
+//       flexWrap: "wrap",
+//       justifyContent: "center",
+//       alignItems: "center",
+//       minHeight: "100vh"
+//     }}>
+//       {countries.map((country) => (
+//         <div key={country.cca3} style={{
+//           width: "200px",
+//           border: "1px solid #ccc",
+//           borderRadius: "10px",
+//           margin: "10px",
+//           padding: "10px",
+//           display: "flex",
+//           flexDirection: "column",
+//           alignItems: "center",
+//           justifyContent: "center",
+//         }}>
+//           <img
+//             src={country.flags.png}
+//             alt={`Flag of ${country.name.common}`}
+//             style={{ width: "100px", height: "100px" }}
+//           />
+//           <h2>{country.name.common}</h2>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
+
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./App.css";
+
+function App() {
   const [countries, setCountries] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("https://xcountries-backend.azurewebsites.net/all")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("API error");
-        }
-        return res.json();
+    axios.get("https://xcountries-backend.azurewebsites.net/all")
+      .then(response => {
+        setCountries(response.data);
       })
-      .then((data) => {
-        setCountries(data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching data: ", err);
-        setError("Something went wrong");
-        setIsLoading(false);
+      .catch(error => {
+        console.error("Error fetching country data:", error);
       });
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>; // ✅ must match exact test string
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
-    <div style={{
-      display: "flex",
-      flexWrap: "wrap",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "100vh"
-    }}>
-      {countries.map((country) => (
-        <div key={country.cca3} style={{
-          width: "200px",
-          border: "1px solid #ccc",
-          borderRadius: "10px",
-          margin: "10px",
-          padding: "10px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}>
-          <img
-            src={country.flags.png}
-            alt={`Flag of ${country.name.common}`}
-            style={{ width: "100px", height: "100px" }}
-          />
-          <h2>{country.name.common}</h2>
-        </div>
-      ))}
+    <div className="app">
+      <h1>Countries</h1>
+      <div className="grid">
+        {countries.map((country, index) => (
+          <div key={index} className="card">
+            <img src={country.flag}  />
+            <p>{country.name}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
+
+export default App;
